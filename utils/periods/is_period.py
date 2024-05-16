@@ -16,10 +16,10 @@ def is_period(text):
     year_pattern_n = r'^P-?\d+Y-#\d+$'
     week_pattern_n = r'^P-?\d+W-#\d+$'
 
-    patterns = [day_pattern, month_pattern, year_pattern, week_pattern, day_pattern_i, month_pattern_i, year_pattern_i, week_pattern_i, day_pattern_n, month_pattern_n, year_pattern_n, week_pattern_n]
-    patterns = "|".join(patterns)
+    patterns_dicts = {day_pattern: "pd", month_pattern: "pm", year_pattern: "py", week_pattern: "pw", day_pattern_i: "pdi", month_pattern_i: "pmi", year_pattern_i: "pyi", week_pattern_i: "pwi", day_pattern_n: "pdn", month_pattern_n: "pmn", year_pattern_n: "pyn", week_pattern_n: "pwn"}
+    patterns = [k for k, v in patterns_dicts.items()]
 
-    if re.match(pattern=patterns, string=text):
-        return True, "Valid format"
-    else:
-        return False, "Invalid format"
+    for pattern in patterns:
+        if re.match(pattern=pattern, string=text):
+            return True, patterns_dicts[pattern]
+    return False, "Invalid format"
