@@ -8,6 +8,9 @@ def compute_similarity_periods(first_period, first_period_type, second_period, s
         return 1.0
     else:
         first_integers, second_integers = extract_integers(first_period), extract_integers(second_period)
+        if first_period_type in ["pdn", "pwn", "pmn", "pyn"]:
+            distance = abs(first_integers[1] - second_integers[1])
+            return 0.5 / distance**2
         if len(first_integers) == 1:
             distance = abs(first_integers[0] - second_integers[0])
             return 0.5 / distance**2
