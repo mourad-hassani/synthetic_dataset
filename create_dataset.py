@@ -2,22 +2,11 @@ import os
 import json
 from stanza.server import CoreNLPClient
 from tqdm import tqdm
+from utils.stanza.temporal_expressions import contains_temporal_expression
 
 client = CoreNLPClient(
     annotators=['tokenize', 'ner'],
     be_quiet=True)
-
-def contains_temporal_expression(text, client):
-    temporal_expression_bool = False
-    temporal_expressions = []
-    doc = client.annotate(text)
-    for sentence in doc.sentence:
-        for token in sentence.token:
-            if token.ner in ["DATE", "TIME", "DURATION", "SET"]:
-                if not token.timexValue.text in [e.text for e in temporal_expressions]:
-                    temporal_expression_bool = True
-                    temporal_expressions.append(token.timexValue)
-    return temporal_expression_bool, temporal_expressions
 
 output_json = []
 
