@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 DATA_FOLDER_PATH = "./data"
 INPUT_FILE_NAME = "preprocessed_questions_HealthCareMagic-100k.json"
-OUTPUT_FILE_NAME = "annotations_dictionary.json"
+OUTPUT_FILE_NAME = "annotations/annotations_dictionary.json"
 
 
 def get_annotations(folder_path, file_name):
@@ -35,4 +35,5 @@ print(len(values.keys()))
 
 with open(os.path.join(DATA_FOLDER_PATH, OUTPUT_FILE_NAME), "w", encoding="utf-8") as f:
     sorted_values = sorted(values.items(), key=lambda x: x[1], reverse=True)
-    json.dump(sorted_values, f, indent=4)
+    values = [value for value in sorted_values if "OFFSET" in value[0]]
+    json.dump(values, f, indent=4)

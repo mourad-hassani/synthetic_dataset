@@ -3,7 +3,7 @@ import json
 
 DATA_FOLDER_PATH = "./data/"
 INPUT_FILE_NAME = "one_sentence/one_sentence.json"
-OUTPUT_FILE_NAME = "./utils/mappings.json"
+OUTPUT_FILE_NAME = "data/mappings/mappings.json"
 
 mappings = {}
 
