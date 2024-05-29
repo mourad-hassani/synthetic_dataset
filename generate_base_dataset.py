@@ -34,5 +34,12 @@ for i in  tqdm(range(1000)):
         sentence_target = f"[CLS] {expression_to_text(second_random_temporal_expression)} [SEP] {expression_to_text(current_date_target)} [SEP]"
         output_data.append((sentence, sentence_target, similarity))
 
+count = 0
+for element in output_data:
+    if element[2] > 0.05:
+        count += 1
+
+print(f"Close similarities : {count / len(output_data)}")
+
 with open(os.path.join(DATA_FOLDER_PATH, OUTPUT_FILE_NAME), "w", encoding="utf-8") as f:
     json.dump(output_data, f, indent=4)

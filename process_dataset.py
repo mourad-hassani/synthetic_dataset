@@ -13,6 +13,7 @@ from utils.offsets.is_offset import is_offset
 from utils.mappings.date_to_text import date_to_text
 from utils.mappings.period_to_text import period_to_text
 from utils.mappings.offset_to_text import offset_to_text
+from utils.dates.dates_settings import START_DATE, END_DATE
 
 DATA_FOLDER_PATH = "data/one_sentence"
 INPUT_FILE_NAME = "one_sentence.json"
@@ -42,12 +43,12 @@ with open(os.path.join(DATA_FOLDER_PATH, INPUT_FILE_NAME), "r", encoding="utf-8"
                     generated_dates.add(element["value"])
                     date_format = is_date(element["value"])[1]
                     year = int(element["value"].split("-")[0])
-                    if 1900 < year < 2100:
+                    if START_DATE < year < END_DATE:
                         start_year = year - 3
                         end_year = year + 3
                     else:
-                        start_year = 1899
-                        end_year = 2099
+                        start_year = START_DATE
+                        end_year = END_DATE
                     random_date = generate_random_date(start_year, end_year)
                     while random_date in generated_dates:
                         random_date = generate_random_date(start_year, end_year)
