@@ -1,4 +1,5 @@
 import random
+from utils.extract_integers import extract_integers
 
 def generate_random_offset():
     rand_int = random.randint(1, 30)
@@ -26,6 +27,11 @@ def generate_random_offset():
         return f"THIS P{abs(rand_int)}Y OFFSET P{rand_int}Y"
 
 def generate_close_random_offset(value, type):
+    if type in ["d", "w", "m", "y"]:
+        value = extract_integers(value)[0]
+    else:
+        value = extract_integers(value)[1]
+        
     is_negative = True if value < 0 else False
     value = abs(value)
     min_value = max(1, value - 10)

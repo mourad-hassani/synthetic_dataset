@@ -5,7 +5,7 @@ from utils.periods.generate_random_period import generate_random_period, generat
 from utils.dates.generate_random import generate_random_date, generate_random_date_full
 from utils.offsets.generate_random_offset import generate_random_offset
 from utils.periods.compute_similarity_periods import compute_similarity_periods
-from utils.dates.compute_similarity import compute_similarity
+from utils.dates.compute_similarity_dates import compute_similarity_dates
 from utils.offsets.compute_similarity_offsets import compute_similarity_offsets
 from utils.periods.is_period import is_period
 from utils.dates.is_date import is_date
@@ -52,7 +52,7 @@ with open(os.path.join(DATA_FOLDER_PATH, INPUT_FILE_NAME), "r", encoding="utf-8"
                     while random_date in generated_dates:
                         random_date = generate_random_date(start_year, end_year)
                     generated_dates.add(random_date)
-                    similarity = compute_similarity(element["value"], random_date)
+                    similarity = compute_similarity_dates(element["value"], random_date)
                     data.append((sentence, date_to_text(random_date), similarity))
             elif is_period(element["value"])[0]:
                 generated_periods = set()

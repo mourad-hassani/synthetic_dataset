@@ -2,7 +2,7 @@ from utils.dates.is_date import is_date
 from utils.dates.is_in import is_in
 from utils.dates.compute_distance_dates import compute_distance_dates_same_type, compute_distance_dates
 
-def compute_similarity(first_date, second_date):
+def compute_similarity_dates(first_date, second_date):
     first_year = int(first_date.split("-")[0])
     second_year = int(second_date.split("-")[0])
     if first_year <= 1900 or second_year > 2100:
