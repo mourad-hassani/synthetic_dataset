@@ -1,7 +1,7 @@
 from utils.extract_integers import extract_integers
 from utils.compute_interval_distance import compute_interval_distance
 from datetime import datetime, timedelta
-from utils.compute_similarity import compute_similarity
+from utils.dates.compute_similarity import compute_similarity
 
 def compute_similarity_offsets(first_offset, first_offset_type, second_offset, second_offset_type, current_date):
     first_offset_in_days = compute_offset_in_days(first_offset, first_offset_type, current_date)
