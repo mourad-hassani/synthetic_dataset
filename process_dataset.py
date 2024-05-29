@@ -3,8 +3,10 @@ import json
 from tqdm import tqdm
 from utils.periods.generate_random_period import generate_random_period, generate_close_random_period
 from utils.dates.generate_random import generate_random_date, generate_random_date_full
+from utils.offsets.generate_random_offset import generate_random_offset
 from utils.periods.compute_similarity_periods import compute_similarity_periods
 from utils.compute_similarity import compute_similarity
+from utils.offsets.compute_similarity_offsets import compute_similarity_offsets
 from utils.periods.is_period import is_period
 from utils.dates.is_date import is_date
 from utils.offsets.is_offset import is_offset
@@ -61,9 +63,20 @@ with open(os.path.join(DATA_FOLDER_PATH, INPUT_FILE_NAME), "r", encoding="utf-8"
                     while random_period in generated_periods:
                         random_period = generate_random_period()
                     generated_periods.add(random_period)
-                    random_period_type = is_period(random_period)[1]
-                    similarity = compute_similarity_periods(element["value"], period_format, random_period, random_period_type)
+                    random_period_format = is_period(random_period)[1]
+                    similarity = compute_similarity_periods(element["value"], period_format, random_period, random_period_format)
                     data.append((sentence, period_to_text(random_period), similarity))
+            elif is_offset(element["value"])[0]:
+                generated_offsets = set()
+                for i in range(5):
+                    offset_format = is_offset(element["value"])[1]
+                    random_offset = generate_random_offset()
+                    while random_offset in generated_offsets():
+                        random_offset = generate_random_offset()
+                    generated_offsets.add(random_offset)
+                    random_offset_format = is_offset(random_offset)
+                    similarity = compute_similarity_offsets(element["value"], offset_format, random_offset, random_offset_format)
+                    data.append((sentence, offset_to_text(random_offset), similarity))
 
 with open(os.path.join(DATA_FOLDER_PATH, OUTPUT_FILE_NAME), "w", encoding="utf-8") as f:
     json.dump(data, f, indent=4)
