@@ -22,6 +22,6 @@ def compute_similarity(first_date, second_date):
         else:
             distance = compute_distance_dates(first_date, first_date_type, second_date, second_date_type)
             distance = distance**2 if distance < 100 else distance
-            return 0.01 / distance
+            return 0.1 / distance
     else:
         raise ValueError(f"first_date: {first_date}, second_date: {second_date}")
