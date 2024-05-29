@@ -32,15 +32,22 @@ with open(os.path.join(DATA_FOLDER_PATH, INPUT_FILE_NAME), "r", encoding="utf-8"
                 value_text = date_to_text(element["value"])
             elif is_period(element["value"])[0]:
                 value_text = period_to_text(element["value"])
+            elif is_offset(element["value"])[0]:
+                value_text = offset_to_text(element["value"])
             if value_text:
                 data.append((sentence, value_text, 1.0))
             if is_date(element["value"])[0]:
                 for i in range(5):
-                    generated_dates = set(element["value"])
+                    generated_dates = set()
+                    generated_dates.add(element["value"])
                     date_format = is_date(element["value"])[1]
                     year = int(element["value"].split("-")[0])
-                    start_year = max(1900, year - 3)
-                    end_year = year + 3
+                    if 1900 < year < 2100:
+                        start_year = year - 3
+                        end_year = year + 3
+                    else:
+                        start_year = 1899
+                        end_year = 2099
                     random_date = generate_random_date(start_year, end_year)
                     while random_date in generated_dates:
                         random_date = generate_random_date(start_year, end_year)
@@ -48,7 +55,8 @@ with open(os.path.join(DATA_FOLDER_PATH, INPUT_FILE_NAME), "r", encoding="utf-8"
                     similarity = compute_similarity(element["value"], random_date)
                     data.append((sentence, date_to_text(random_date), similarity))
             elif is_period(element["value"])[0]:
-                generated_periods = set(element["value"])
+                generated_periods = set()
+                generated_periods.add(element["value"])
                 for i in range(3):
                     period_format = is_period(element["value"])[1]
                     random_period = generate_close_random_period(element["value"], period_format)
@@ -68,14 +76,15 @@ with open(os.path.join(DATA_FOLDER_PATH, INPUT_FILE_NAME), "r", encoding="utf-8"
                     data.append((sentence, period_to_text(random_period), similarity))
             elif is_offset(element["value"])[0]:
                 generated_offsets = set()
+                generated_offsets.add(element["value"])
                 for i in range(5):
                     offset_format = is_offset(element["value"])[1]
                     random_offset = generate_random_offset()
-                    while random_offset in generated_offsets():
+                    while random_offset in generated_offsets:
                         random_offset = generate_random_offset()
                     generated_offsets.add(random_offset)
-                    random_offset_format = is_offset(random_offset)
-                    similarity = compute_similarity_offsets(element["value"], offset_format, random_offset, random_offset_format)
+                    random_offset_format = is_offset(random_offset)[1]
+                    similarity = compute_similarity_offsets(element["value"], offset_format, random_offset, random_offset_format, current_date)
                     data.append((sentence, offset_to_text(random_offset), similarity))
 
 with open(os.path.join(DATA_FOLDER_PATH, OUTPUT_FILE_NAME), "w", encoding="utf-8") as f:

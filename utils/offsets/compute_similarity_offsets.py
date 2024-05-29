@@ -10,7 +10,7 @@ def compute_similarity_offsets(first_offset, first_offset_type, second_offset, s
     if len(first_offset_in_days) != len(second_offset_in_days):
         return 0.05
     if len(first_offset_in_days) == 1:
-        return compute_similarity(first_offset_in_days, second_offset_in_days)
+        return compute_similarity(first_offset_in_days[0], second_offset_in_days[0])
     else:
         distance = compute_interval_distance(first_offset_in_days, second_offset_in_days)
         if distance == 0:
@@ -25,8 +25,8 @@ def compute_offset_in_days(offset, offset_type, current_date):
         new_date = date_obj + timedelta(days=offset)
         return [new_date.strftime("%Y-%m-%d")]
     elif offset_type == "w":
-        offset = extract_integers(offset)[0]
-        new_date = date_obj + timedelta(weeks=offset)
+        offset = extract_integers(offset)[0] * 7
+        new_date = date_obj + timedelta(days=offset)
         return [new_date.strftime("%Y-%m-%d")]
     elif offset_type == "m":
         offset = extract_integers(offset)[0] * 30
@@ -45,12 +45,12 @@ def compute_offset_in_days(offset, offset_type, current_date):
             new_date = date_obj + timedelta(days=offset)
             return [current_date, new_date.strftime("%Y-%m-%d")]
     elif offset_type == "tw":
-        offset = extract_integers(offset)[1]
+        offset = extract_integers(offset)[1] * 7
         if offset < 0:
-            new_date = date_obj + timedelta(weeks=offset)
+            new_date = date_obj + timedelta(days=offset)
             return [new_date.strftime("%Y-%m-%d"), current_date]
         else:
-            new_date = date_obj + timedelta(weeks=offset)
+            new_date = date_obj + timedelta(days=offset)
             return [current_date, new_date.strftime("%Y-%m-%d")]
     elif offset_type == "tm":
         offset = extract_integers(offset)[1] * 30
