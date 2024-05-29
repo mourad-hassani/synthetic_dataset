@@ -19,7 +19,7 @@ def generate_random_period():
     elif rand_int == 2:
         rand_int = random.randint(0, 3)
         rand_per = random.randint(1, 10)
-        rand_per1 = random.randint(rand_per, rand_per + 10)
+        rand_per1 = random.randint(rand_per + 1, rand_per + 10)
         return third_type[rand_int][0] + str(rand_per) + third_type[rand_int][1] + str(rand_per1) + third_type[rand_int][2]
 
 def generate_close_random_period(period, type):

@@ -41,6 +41,8 @@ def period_to_text(annotation):
                 return "2nd day"
             elif extracted_integers[1] == 3:
                 return "3rd day"
+            else:
+                return f"{extracted_integers[1]}th day"
         elif period_format == "pwn":
             if extracted_integers[1] == 1:
                 return "first week"
@@ -48,6 +50,8 @@ def period_to_text(annotation):
                 return "2nd week"
             elif extracted_integers[1] == 3:
                 return "3rd week"
+            else:
+                return f"{extracted_integers[1]}th week"
         elif period_format == "pmn":
             if extracted_integers[1] == 1:
                 return "first month"
@@ -55,6 +59,8 @@ def period_to_text(annotation):
                 return "2nd month"
             elif extracted_integers[1] == 3:
                 return "3rd month"
+            else:
+                return f"{extracted_integers[1]}th month"
         elif period_format == "pyn":
             if extracted_integers[1] == 1:
                 return "first year"
@@ -62,4 +68,6 @@ def period_to_text(annotation):
                 return "2nd year"
             elif extracted_integers[1] == 3:
                 return "3rd year"
+            else:
+                return f"{extracted_integers[1]}th year"
     return None

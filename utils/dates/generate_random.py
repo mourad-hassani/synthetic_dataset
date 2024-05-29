@@ -22,3 +22,11 @@ def generate_random_date(start_year, end_year):
     else:
         times = ["MO", "NI"]
         return str(random_date.strftime("%Y-%m-%d") + f"T{times[random.randint(0, 1)]}")
+    
+def generate_random_date_full(start_year, end_year):
+    start_date = datetime.datetime(start_year, 1, 1)
+    end_date = datetime.datetime(end_year, 12, 31)
+    delta = end_date - start_date
+    random_days = random.randint(0, delta.days)
+    random_date = start_date + datetime.timedelta(days=random_days)
+    return random_date.strftime("%Y-%m-%d")
