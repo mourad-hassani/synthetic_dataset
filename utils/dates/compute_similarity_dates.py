@@ -1,6 +1,7 @@
 from utils.dates.is_date import is_date
 from utils.dates.is_in import is_in
 from utils.dates.compute_distance_dates import compute_distance_dates_same_type, compute_distance_dates
+from utils.compute_interval_distance import compute_interval_distance_date
 
 def compute_similarity_dates(first_date, second_date):
     first_year = int(first_date.split("-")[0])
@@ -25,3 +26,18 @@ def compute_similarity_dates(first_date, second_date):
             return 0.1 / distance
     else:
         raise ValueError(f"first_date: {first_date}, second_date: {second_date}")
+
+def compute_similarity_dates_intervals(first_date, second_date):
+    if len(first_date) == 1 and len(second_date) == 1:
+        return compute_similarity_dates(first_date[0], second_date[0])
+    
+    if len(first_date) == 1:
+        first_date = first_date * 2
+    if len(second_date) == 1:
+        second_date = second_date * 2
+    
+    distance = compute_interval_distance_date(first_date, second_date)
+    if distance == 0:
+        return 0.8
+    else:
+        return 0.5 / distance**2
