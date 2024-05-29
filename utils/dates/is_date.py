@@ -1,5 +1,7 @@
 import re
 
+MIN_YEAR = 1000
+
 def is_date(text):
     yyyy_pattern = r'^\d{4}$'
     yyyy_mm_pattern = r'^\d{4}-\d{2}$'
@@ -8,7 +10,7 @@ def is_date(text):
     yyyy_s_pattern = r'^\d{4}-(?:SU|WI|FA|SP)$'
 
     if re.match(r"^\d{4}", text):
-        if int(text[:4]) < 1900:
+        if int(text[:4]) < MIN_YEAR:
             return False, "Less than 1900"
 
     if re.match(yyyy_mm_dd_pattern, text):
@@ -16,7 +18,7 @@ def is_date(text):
     elif re.match(yyyy_mm_pattern, text):
         return True, "yyyy-mm"
     elif re.match(yyyy_pattern, text):
-        if int(text) >= 1900:
+        if int(text) >= MIN_YEAR:
             return True, "yyyy"
         else:
             return False, "Not a year"
