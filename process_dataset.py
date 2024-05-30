@@ -26,7 +26,7 @@ with open(os.path.join(DATA_FOLDER_PATH, INPUT_FILE_NAME), "r", encoding="utf-8"
 
     for element in tqdm(input_data):
         if element["value"] != "":
-            current_date = generate_random_date_full(2000, 2024)
+            current_date = generate_random_date_full(START_DATE, END_DATE)
             sentence = f"[CLS] {element['input']} [SEP] {date_to_text(current_date)} [SEP]"
             value_text = None
             if is_date(element["value"])[0]:
