@@ -28,12 +28,10 @@ def get_annotations(folder_path, file_name):
     return values
 
 values = get_annotations(folder_path=DATA_FOLDER_PATH, file_name=INPUT_FILE_NAME)
-for k, v in values.items():
-    print(f"key: {k}, value: {v}")
 
 print(len(values.keys()))
 
 with open(os.path.join(DATA_FOLDER_PATH, OUTPUT_FILE_NAME), "w", encoding="utf-8") as f:
     sorted_values = sorted(values.items(), key=lambda x: x[1], reverse=True)
-    values = [value for value in sorted_values if "OFFSET" in value[0]]
-    json.dump(values, f, indent=4)
+    # values = [value for value in sorted_values if "OFFSET" in value[0]]
+    json.dump(sorted_values, f, indent=4)
