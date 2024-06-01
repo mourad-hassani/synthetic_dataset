@@ -23,8 +23,6 @@ def to_explicit_date(annotation):
         else:
             last_day = 30
         return [f"{year}-{month}-01", f"{year}-{month}-{last_day}"]
-    elif date_format == "yyyy-mm-dd-t":
-        return [annotation.split("T")[0]]
     elif date_format == "yyyy-s":
         year = annotation.split("-")[0]
         season = annotation.split("-")[1]

@@ -104,14 +104,6 @@ def generate_close_random_offset(value, type):
         return f"THIS P{abs(rand_int)}M OFFSET P{rand_int}M"
     elif type == "ty":
         return f"THIS P{abs(rand_int)}Y OFFSET P{rand_int}Y"
-    elif type == "timed":
-        return f"T{time_text} OFFSET P{rand_int}D"
-    elif type == "timew":
-        return f"T{time_text} OFFSET P{rand_int}W"
-    elif type == "timem":
-        return f"T{time_text} OFFSET P{rand_int}M"
-    elif type == "timey":
-        return f"T{time_text} OFFSET P{rand_int}Y"
     elif type == "thisd":
         return f"THIS P{rand_int}D"
     elif type == "thisw":

@@ -55,34 +55,6 @@ def to_date(annotation, current_date):
         else:
             new_date = date_obj + timedelta(days=offset)
             return [current_date, new_date.strftime("%Y-%m-%d")]
-    elif annotation_type == "timed":
-        offset = extract_integers(annotation)[0]
-        new_date = date_obj + timedelta(days=offset)
-        time_text = "NI"
-        if "TMO" in annotation:
-            time_text = "MO"
-        return [f"{new_date.strftime("%Y-%m-%d")}T{time_text}"]
-    elif annotation_type == "timew":
-        offset = extract_integers(annotation)[0] * 7
-        new_date = date_obj + timedelta(days=offset)
-        time_text = "NI"
-        if "TMO" in annotation:
-            time_text = "MO"
-        return [f"{new_date.strftime("%Y-%m-%d")}T{time_text}"]
-    elif annotation_type == "timem":
-        offset = extract_integers(annotation)[0] * 30
-        new_date = date_obj + timedelta(days=offset)
-        time_text = "NI"
-        if "TMO" in annotation:
-            time_text = "MO"
-        return [f"{new_date.strftime("%Y-%m-%d")}T{time_text}"]
-    elif annotation_type == "timey":
-        offset = extract_integers(annotation)[0] * 356
-        new_date = date_obj + timedelta(days=offset)
-        time_text = "NI"
-        if "TMO" in annotation:
-            time_text = "MO"
-        return [f"{new_date.strftime("%Y-%m-%d")}T{time_text}"]
     elif annotation_type == "thisd":
         offset = extract_integers(annotation)[0]
         if offset == 1:

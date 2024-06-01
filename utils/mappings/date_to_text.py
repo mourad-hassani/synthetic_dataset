@@ -44,16 +44,4 @@ def date_to_text(annotation):
             day = annotation.split("-")[-1]
             month = integer_to_month[int(month)]
             return f"{day} {month} {year}"
-        elif date_format == "yyyy-mm-dd-t":
-            year = annotation.split("-")[0]
-            month = annotation.split("-")[1]
-            day = annotation.split("-")[-1]
-            day_time = day.split("T")[-1]
-            if day_time == "MO":
-                day_time = "morning"
-            elif day_time == "NI":
-                day_time = "night"
-            day = day.split("T")[0]
-            month = integer_to_month[int(month)]
-            return f"the {day_time} of {day} {month} {year}"
     return None
