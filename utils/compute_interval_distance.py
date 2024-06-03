@@ -21,10 +21,10 @@ def compute_interval_distance_date(interval1, interval2):
     if end1 >= start2 and end2 >= start1:
         overlap_start = max(start1, start2)
         overlap_end = min(end1, end2)
-        overlap_length = overlap_end - overlap_start
+        overlap_length = overlap_end - overlap_start + 1
         union_start = min(start1, start2)
         union_end = max(end1, end2)
-        union_length = union_end - union_start
+        union_length = union_end - union_start + 1
         overlap_fraction = overlap_length / union_length
         return max(0.8, overlap_fraction), True
     

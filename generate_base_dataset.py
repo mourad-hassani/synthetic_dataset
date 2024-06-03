@@ -8,10 +8,12 @@ from tqdm import tqdm
 from utils.dates.dates_settings import START_DATE, END_DATE
 from utils.refs.ref_to_date import ref_to_date
 from utils.offsets.offset_to_date import offset_to_date
+from utils.intervals.interval_to_date import interval_to_date
 from utils.dates.to_explicit_date import to_explicit_date
 from utils.refs.is_ref import is_ref
 from utils.offsets.is_offset import is_offset
 from utils.dates.is_date import is_date
+from utils.intervals.is_interval import is_interval
 
 DATA_FOLDER_PATH = "data/base_dataset"
 OUTPUT_FILE_NAME = "base_dataset_close.json"
@@ -20,7 +22,10 @@ output_data = []
 
 for i in  tqdm(range(100)):
     first_random_temporal_expression = generate_random_temporal_expression()
+    first_random_temporal_text = expression_to_text(first_random_temporal_expression)
     current_date = generate_random_date_full(START_DATE, END_DATE)
+    current_text = expression_to_text(current_date)
+
     year = int(current_date.split("-")[0])
     if START_DATE < year < END_DATE:
         start_year = year - 1
@@ -29,10 +34,10 @@ for i in  tqdm(range(100)):
         start_year = START_DATE
         end_year = END_DATE
     current_date_target = generate_random_date_full(start_year, end_year)
-    first_random_temporal_text = expression_to_text(first_random_temporal_expression)
-    current_text = expression_to_text(current_date)
     current_target_text = expression_to_text(current_date_target)
+
     sentence = f"[CLS] {first_random_temporal_text} [SEP] {current_text} [SEP]"
+    
     for j in range(2):
         second_random_temporal_expression = generate_random_temporal_expression()
         second_random_temporal_text = expression_to_text(second_random_temporal_expression)
@@ -53,16 +58,13 @@ for i in  tqdm(range(100)):
             dates = ref_to_date(first_random_temporal_expression, current_date)
         elif is_date(first_random_temporal_expression)[0]:
             dates = to_explicit_date(first_random_temporal_expression)
+        elif is_interval(first_random_temporal_expression)[0]:
+            dates = interval_to_date(first_random_temporal_expression)
         if dates:
-            start_date = dates[0]
-            end_date = dates[1] if len(dates) > 1 else start_date
-            start_year = int(start_date.split("-")[0])
-            end_year = int(end_date.split("-")[0])
-            start_month = int(start_date.split("-")[1])
-            end_month = int(end_date.split("-")[1])
-            start_day = int(start_date.split("-")[2])
-            end_day = int(end_date.split("-")[2])
-            second_random_temporal_expression = generate_random_date_full(start_year, end_year, start_month, end_month, start_day, end_day)
+            if len(dates) > 1:
+                second_random_temporal_expression = f"{dates[0]},{dates[1]}"
+            else:
+                second_random_temporal_expression = dates[0]
         else:
             second_random_temporal_expression = generate_close_random_temporal_expression(first_random_temporal_expression, current_date)
         second_random_temporal_text = expression_to_text(second_random_temporal_expression)
