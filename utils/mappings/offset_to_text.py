@@ -11,6 +11,16 @@ def offset_to_text(annotation):
     this_month_offset_pattern = r"^THIS P(-?\d+)M OFFSET P(-?\d+)M$"
     this_year_offset_pattern = r"^THIS P(-?\d+)Y OFFSET P(-?\d+)Y$"
 
+    day_this_pattern = r'^THIS P(-?\d+)D$'
+    week_this_pattern = r'^THIS P(-?\d+)W$'
+    month_this_pattern = r'^THIS P(-?\d+)M$'
+    year_this_pattern = r'^THIS P(-?\d+)Y$'
+
+    day_immediate_pattern = r'^(?:NEXT_IMMEDIATE|PREV_IMMEDIATE) P(-?\d+)D$'
+    week_immediate_pattern = r'^(?:NEXT_IMMEDIATE|PREV_IMMEDIATE) P(-?\d+)W$'
+    month_immediate_pattern = r'^(?:NEXT_IMMEDIATE|PREV_IMMEDIATE) P(-?\d+)M$'
+    year_immediate_pattern = r'^(?:NEXT_IMMEDIATE|PREV_IMMEDIATE) P(-?\d+)Y$'
+
     if match := re.search(this_day_offset_pattern, annotation):
         first_integer, second_integer = match.group(1), match.group(2)
         first_integer_abs, second_integer_abs = abs(int(first_integer)), abs(int(second_integer))
@@ -151,4 +161,89 @@ def offset_to_text(annotation):
                 return f"{first_integer_abs} years later"
             else:
                 return None
+    elif match := re.search(day_this_pattern, annotation):
+        first_integer = int(match.group(1))
+        if first_integer == 1:
+            return "today"
+        elif first_integer > 1:
+            return f"these {first_integer} days"
+        else:
+            return None
+    elif match := re.search(week_this_pattern, annotation):
+        first_integer = int(match.group(1))
+        if first_integer == 1:
+            return "this week"
+        elif first_integer > 1:
+            return f"these {first_integer} weeks"
+        else:
+            return None
+    elif match := re.search(month_this_pattern, annotation):
+        first_integer = int(match.group(1))
+        if first_integer == 1:
+            return "this month"
+        elif first_integer > 1:
+            return f"these {first_integer} months"
+        else:
+            return None
+    elif match := re.search(year_this_pattern, annotation):
+        first_integer = int(match.group(1))
+        if first_integer == 1:
+            return "this year"
+        elif first_integer > 1:
+            return f"these {first_integer} years"
+        else:
+            return None
+    elif match := re.search(day_immediate_pattern, annotation):
+        first_integer = int(match.group(1))
+        if "PREV_IMMEDIATE" in annotation:
+            if first_integer == 1:
+                return "the last day"
+            elif first_integer > 1:
+                return f"these past {first_integer} days"
+        if "NEXT_IMMEDIATE" in annotation:
+            if first_integer == 1:
+                return "the next day"
+            elif first_integer > 1:
+                return f"these next {first_integer} days"
+        return None
+    elif match := re.search(week_immediate_pattern, annotation):
+        first_integer = int(match.group(1))
+        if "PREV_IMMEDIATE" in annotation:
+            if first_integer == 1:
+                return "the last week"
+            elif first_integer > 1:
+                return f"these past {first_integer} weeks"
+        if "NEXT_IMMEDIATE" in annotation:
+            if first_integer == 1:
+                return "the next week"
+            elif first_integer > 1:
+                return f"these next {first_integer} weeks"
+        return None
+    elif match := re.search(month_immediate_pattern, annotation):
+        first_integer = int(match.group(1))
+        if "PREV_IMMEDIATE" in annotation:
+            if first_integer == 1:
+                return "the last month"
+            elif first_integer > 1:
+                return f"these past {first_integer} months"
+        if "NEXT_IMMEDIATE" in annotation:
+            if first_integer == 1:
+                return "the next month"
+            elif first_integer > 1:
+                return f"these next {first_integer} months"
+        return None
+    elif match := re.search(year_immediate_pattern, annotation):
+        first_integer = int(match.group(1))
+        if "PREV_IMMEDIATE" in annotation:
+            if first_integer == 1:
+                return "the last year"
+            elif first_integer > 1:
+                return f"these past {first_integer} years"
+        if "NEXT_IMMEDIATE" in annotation:
+            if first_integer == 1:
+                return "the next year"
+            elif first_integer > 1:
+                return f"these next {first_integer} years"
+        return None
+    
     return None

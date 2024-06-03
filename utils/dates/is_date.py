@@ -1,6 +1,7 @@
 import re
+from utils.dates.dates_settings import IS_DATE_START_DATE
 
-START_DATE = 1000
+START_DATE = IS_DATE_START_DATE
 
 def is_date(text):
     yyyy_pattern = r'^\d{4}$'

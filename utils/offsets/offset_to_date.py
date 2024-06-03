@@ -3,7 +3,7 @@ from utils.extract_integers import extract_integers
 from datetime import datetime, timedelta
 from utils.dates.date_utils import get_week_dates, get_month_dates, get_year_dates
 
-def to_date(annotation, current_date):
+def offset_to_date(annotation, current_date):
     date_obj = datetime.strptime(current_date, "%Y-%m-%d")
     annotation_type = is_offset(annotation)[1]
 

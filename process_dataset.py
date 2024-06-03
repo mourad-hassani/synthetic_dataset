@@ -2,7 +2,7 @@ import os
 import json
 from tqdm import tqdm
 from utils.periods.generate_random_period import generate_random_period, generate_close_random_period
-from utils.dates.generate_random import generate_random_date, generate_random_date_full
+from utils.dates.generate_random_date import generate_random_date, generate_random_date_full
 from utils.offsets.generate_random_offset import generate_random_offset
 from utils.periods.compute_similarity_periods import compute_similarity_periods
 from utils.dates.compute_similarity_dates import compute_similarity_dates

@@ -37,8 +37,8 @@ def compute_similarity_dates_intervals(first_date, second_date):
     if len(second_date) == 1:
         second_date = second_date * 2
     
-    distance = compute_interval_distance_date(first_date, second_date)
-    if distance == 0:
-        return 0.8
+    distance, overlap = compute_interval_distance_date(first_date, second_date)
+    if overlap:
+        return distance
     else:
-        return 0.5 / distance**2
+        return 0.5 / distance

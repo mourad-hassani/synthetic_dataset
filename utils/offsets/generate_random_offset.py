@@ -4,16 +4,11 @@ from utils.extract_integers import extract_integers
 def generate_random_offset():
     rand_int = random.randint(1, 30)
     is_negative = bool(random.getrandbits(1))
-    rand_format = random.randint(0, 19)
+    rand_format = random.randint(0, 15)
     rand_bool = bool(random.getrandbits(1))
 
     if is_negative:
         rand_int *= -1
-    
-    if rand_bool:
-        time_text = "MO"
-    else:
-        time_text = "NI"
     
     if rand_bool:
         immediate_text = "NEXT_IMMEDIATE"
@@ -37,29 +32,21 @@ def generate_random_offset():
     elif rand_format == 7:
         return f"THIS P{abs(rand_int)}Y OFFSET P{rand_int}Y"
     elif rand_format == 8:
-        return f"T{time_text} OFFSET P{rand_int}D"
+        return f"THIS P{abs(rand_int)}D"
     elif rand_format == 9:
-        return f"T{time_text} OFFSET P{rand_int}W"
+        return f"THIS P{abs(rand_int)}W"
     elif rand_format == 10:
-        return f"T{time_text} OFFSET P{rand_int}M"
+        return f"THIS P{abs(rand_int)}M"
     elif rand_format == 11:
-        return f"T{time_text} OFFSET P{rand_int}Y"
+        return f"THIS P{abs(rand_int)}Y"
     elif rand_format == 12:
-        return f"THIS P{rand_int}D"
+        return f"{immediate_text} P{abs(rand_int)}D"
     elif rand_format == 13:
-        return f"THIS P{rand_int}W"
+        return f"{immediate_text} P{abs(rand_int)}W"
     elif rand_format == 14:
-        return f"THIS P{rand_int}M"
+        return f"{immediate_text} P{abs(rand_int)}M"
     elif rand_format == 15:
-        return f"THIS P{rand_int}Y"
-    elif rand_format == 16:
-        return f"{immediate_text} P{rand_int}D"
-    elif rand_format == 17:
-        return f"{immediate_text} P{rand_int}W"
-    elif rand_format == 18:
-        return f"{immediate_text} P{rand_int}M"
-    elif rand_format == 19:
-        return f"{immediate_text} P{rand_int}Y"
+        return f"{immediate_text} P{abs(rand_int)}Y"
 
 def generate_close_random_offset(value, type):
     if type in ["td", "tw", "tm", "ty"]:
@@ -77,11 +64,6 @@ def generate_close_random_offset(value, type):
         rand_int *= -1
 
     rand_bool = bool(random.getrandbits(1))
-
-    if rand_bool:
-        time_text = "MO"
-    else:
-        time_text = "NI"
     
     if rand_bool:
         immediate_text = "NEXT_IMMEDIATE"

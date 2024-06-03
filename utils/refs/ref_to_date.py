@@ -1,9 +1,9 @@
-def to_date(annotation, current_date):
+def ref_to_date(annotation, current_date):
     if annotation == "PRESENT_REF":
         return [current_date]
     if annotation == "THIS NI":
-        return [f"{current_date}TNI"]
+        return [current_date]
     if annotation == "THIS MO":
-        return [f"{current_date}TMO"]
+        return [current_date]
     
     return None

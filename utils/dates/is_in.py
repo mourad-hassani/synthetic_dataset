@@ -6,9 +6,6 @@ season_to_months = {
 }
 
 def is_in(first_date, first_date_type, second_date, second_date_type):
-    """
-    This function takes two dates of different types.
-    """
     if first_date_type != second_date_type:
         if (first_date in second_date) or (second_date in first_date):
             return True
