@@ -26,10 +26,18 @@ def compute_interval_distance_date(interval1, interval2):
         union_end = max(end1, end2)
         union_length = union_end - union_start
         overlap_fraction = overlap_length / union_length
-        return overlap_fraction
+        return max(0.8, overlap_fraction), True
     
     distance = max(start2 - end1, start1 - end2)
-    return distance
+
+    unit = min(abs(interval1[0] - interval1[1]) + 1, abs(interval2[0] - interval2[1]) + 1)
+
+    if (distance / unit) < 10:
+        output_distance = distance
+    else:
+        output_distance = (distance / unit)
+
+    return output_distance, False
 
 def days_since_base(date_string, base_date_string="1000-01-01"):
     date = datetime.strptime(date_string, "%Y-%m-%d")
