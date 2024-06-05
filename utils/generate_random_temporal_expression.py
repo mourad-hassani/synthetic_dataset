@@ -51,3 +51,5 @@ def generate_close_random_temporal_expression(expression, current_date):
         else:
             year = int(current_date.split("-")[0])
             return generate_random_date(year, year)
+    
+    return None

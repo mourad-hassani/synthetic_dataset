@@ -20,7 +20,7 @@ OUTPUT_FILE_NAME = "base_dataset_close.json"
 
 output_data = []
 
-for i in  tqdm(range(100)):
+for i in  tqdm(range(1000000)):
     first_random_temporal_expression = generate_random_temporal_expression()
     first_random_temporal_text = expression_to_text(first_random_temporal_expression)
     current_date = generate_random_date_full(START_DATE, END_DATE)

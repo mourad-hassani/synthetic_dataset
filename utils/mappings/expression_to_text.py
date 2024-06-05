@@ -20,3 +20,5 @@ def expression_to_text(annotation):
         return ref_to_text(annotation)
     if is_interval(annotation)[0]:
         return interval_to_text(annotation)
+    
+    return None

@@ -2,7 +2,7 @@ import random
 from utils.extract_integers import extract_integers
 
 def generate_random_offset():
-    rand_int = random.randint(1, 30)
+    rand_int = random.randint(1, 20)
     is_negative = bool(random.getrandbits(1))
     rand_format = random.randint(0, 15)
     rand_bool = bool(random.getrandbits(1))

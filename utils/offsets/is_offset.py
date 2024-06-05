@@ -1,4 +1,5 @@
 import re
+from utils.extract_integers import extract_integers
 
 def is_offset(text):
     day_offset_pattern = r'^OFFSET P(-?\d+)D$'
@@ -26,6 +27,8 @@ def is_offset(text):
 
     for pattern in patterns:
         if re.match(pattern=pattern, string=text):
-            return True, patterns_dicts[pattern]
+            pattern_detected = patterns_dicts[pattern]
+            if abs(extract_integers(text)[-1]) < 30:
+                return True, pattern_detected
     
     return False, "Invalid format"

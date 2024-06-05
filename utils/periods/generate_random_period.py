@@ -22,8 +22,8 @@ def generate_random_period():
 
 def generate_close_random_period(period, type):
     integers = extract_integers(period)
-    first_rand_int = abs(random.randint(integers[0]-10, integers[0]+10))
-    second_rand_int = abs(random.randint(max(1, integers[0]-10), integers[0]+10))
+    first_rand_int = abs(random.randint(integers[0]-5, integers[0]+5))
+    second_rand_int = abs(random.randint(max(1, integers[0]-5), integers[0]+5))
     if type == "pd":
         return f"P{first_rand_int}D"
     elif type == "pw":
@@ -41,18 +41,18 @@ def generate_close_random_period(period, type):
     elif type == "pyn":
         return f"P1Y-#{second_rand_int}"
     elif type == "pdi":
-        rand_per = abs(random.randint(max(1, integers[0]-10), integers[0]+10))
-        rand_per1 = abs(random.randint(rand_per+1, max(rand_per+1, integers[1] + 10)))
+        rand_per = abs(random.randint(max(1, integers[0]-5), integers[0]+5))
+        rand_per1 = abs(random.randint(rand_per+1, max(rand_per+1, integers[1] + 5)))
         return f"P{(rand_per)}D/P{rand_per1}D"
     elif type == "pwi":
-        rand_per = abs(random.randint(max(1, integers[0]-10), integers[0]+10))
-        rand_per1 = abs(random.randint(rand_per+1, max(rand_per+1, integers[1] + 10)))
+        rand_per = abs(random.randint(max(1, integers[0]-5), integers[0]+5))
+        rand_per1 = abs(random.randint(rand_per+1, max(rand_per+1, integers[1] + 5)))
         return f"P{rand_per}W/P{rand_per1}W"
     elif type == "pmi":
-        rand_per = abs(random.randint(max(1, integers[0]-10), integers[0]+10))
-        rand_per1 = abs(random.randint(rand_per+1, max(rand_per+1, integers[1] + 10)))
+        rand_per = abs(random.randint(max(1, integers[0]-5), integers[0]+5))
+        rand_per1 = abs(random.randint(rand_per+1, max(rand_per+1, integers[1] + 5)))
         return f"P{rand_per}M/P{rand_per1}M"
     elif type == "pyi":
-        rand_per = abs(random.randint(max(1, integers[0]-10), integers[0]+10))
-        rand_per1 = abs(random.randint(rand_per+1, max(rand_per+1, integers[1] + 10)))
+        rand_per = abs(random.randint(max(1, integers[0]-5), integers[0]+5))
+        rand_per1 = abs(random.randint(rand_per+1, max(rand_per+1, integers[1] + 5)))
         return f"P{rand_per}Y/P{rand_per1}Y"
