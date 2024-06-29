@@ -10,14 +10,25 @@ from utils.offsets.compute_similarity_offsets import compute_similarity_offsets
 from utils.periods.is_period import is_period
 from utils.dates.is_date import is_date
 from utils.offsets.is_offset import is_offset
+from utils.refs.is_ref import is_ref
+from utils.intervals.is_interval import is_interval
 from utils.mappings.date_to_text import date_to_text
 from utils.mappings.period_to_text import period_to_text
 from utils.mappings.offset_to_text import offset_to_text
+from utils.mappings.ref_to_text import ref_to_text
+from utils.mappings.interval_to_text import interval_to_text
 from utils.dates.dates_settings import START_DATE, END_DATE
+from utils.mappings.expression_to_text import expression_to_text
+from utils.generate_random_temporal_expression import generate_random_temporal_expression, generate_close_random_temporal_expression
+from utils.compute_similarity_expressions import compute_similarity_expressions
+from utils.offsets.offset_to_date import offset_to_date
+from utils.refs.ref_to_date import ref_to_date
+from utils.dates.to_explicit_date import to_explicit_date
+from utils.intervals.interval_to_date import interval_to_date
 
 DATA_FOLDER_PATH = "data/one_sentence"
-INPUT_FILE_NAME = "one_sentence.json"
-OUTPUT_FILE_NAME = "processed_one_sentence.json"
+INPUT_FILE_NAME = "one_sentence_list.json"
+OUTPUT_FILE_NAME = "processed_one_sentence_list.json"
 
 data = []
 
@@ -25,68 +36,68 @@ with open(os.path.join(DATA_FOLDER_PATH, INPUT_FILE_NAME), "r", encoding="utf-8"
     input_data = json.load(f)
 
     for element in tqdm(input_data):
-        if element["value"] != "":
+        expressions_tmp = element["expressions"]
+        values_tmp = [e if expression_to_text(e) else None for e in element["values"]]
+        expressions, values = [], []
+        for e, v in zip(expressions_tmp, values_tmp):
+            if v:
+                expressions.append(e)
+                values.append(v)
+        for expression, value in zip(expressions, values):
             current_date = generate_random_date_full(START_DATE, END_DATE)
-            sentence = f"[CLS] {element['input']} [SEP] {date_to_text(current_date)} [SEP]"
-            value_text = None
-            if is_date(element["value"])[0]:
-                value_text = date_to_text(element["value"])
-            elif is_period(element["value"])[0]:
-                value_text = period_to_text(element["value"])
-            elif is_offset(element["value"])[0]:
-                value_text = offset_to_text(element["value"])
-            if value_text:
-                data.append((sentence, value_text, 1.0))
-            if is_date(element["value"])[0]:
-                for i in range(5):
-                    generated_dates = set()
-                    generated_dates.add(element["value"])
-                    date_format = is_date(element["value"])[1]
-                    year = int(element["value"].split("-")[0])
-                    if START_DATE < year < END_DATE:
-                        start_year = year - 3
-                        end_year = year + 3
+            current_text = expression_to_text(current_date)
+
+            sentence = f"[CLS] {element["input"]} [SEP] {current_text} [SEP]"
+            
+            year = int(current_date.split("-")[0])
+            if START_DATE < year < END_DATE:
+                start_year = year - 1
+                end_year = year + 1
+            else:
+                start_year = START_DATE
+                end_year = END_DATE
+
+            for j in range(2):
+                current_date_target = generate_random_date_full(start_year, end_year)
+                current_target_text = expression_to_text(current_date_target)
+                second_random_temporal_expression = generate_random_temporal_expression()
+                second_random_temporal_text = expression_to_text(second_random_temporal_expression)
+                similarity = max([compute_similarity_expressions(v, second_random_temporal_expression, current_date, current_date_target) for v in values])
+                sentence_target = f"[CLS] {second_random_temporal_text} [SEP] {current_target_text} [SEP]"
+                data.append((sentence, sentence_target, similarity))
+            for j in range(2):
+                current_date_target = generate_random_date_full(start_year, end_year)
+                current_target_text = expression_to_text(current_date_target)
+                second_random_temporal_expression = generate_close_random_temporal_expression(value, current_date)
+                second_random_temporal_text = expression_to_text(second_random_temporal_expression)
+                similarity = max([compute_similarity_expressions(v, second_random_temporal_expression, current_date, current_date_target) for v in values])
+                sentence_target = f"[CLS] {second_random_temporal_text} [SEP] {current_target_text} [SEP]"
+                data.append((sentence, sentence_target, similarity))
+            for j in range(1):
+                current_date_target = generate_random_date_full(start_year, end_year)
+                current_target_text = expression_to_text(current_date_target)
+                dates = None
+                if is_offset(value)[0]:
+                    dates = offset_to_date(value, current_date)
+                elif is_ref(value)[0]:
+                    dates = ref_to_date(value, current_date)
+                elif is_date(value)[0]:
+                    dates = to_explicit_date(value)
+                elif is_interval(value)[0]:
+                    dates = interval_to_date(value)
+                if dates:
+                    if len(dates) > 1:
+                        second_random_temporal_expression = f"{dates[0]},{dates[1]}"
                     else:
-                        start_year = START_DATE
-                        end_year = END_DATE
-                    random_date = generate_random_date(start_year, end_year)
-                    while random_date in generated_dates:
-                        random_date = generate_random_date(start_year, end_year)
-                    generated_dates.add(random_date)
-                    similarity = compute_similarity_dates(element["value"], random_date)
-                    data.append((sentence, date_to_text(random_date), similarity))
-            elif is_period(element["value"])[0]:
-                generated_periods = set()
-                generated_periods.add(element["value"])
-                for i in range(3):
-                    period_format = is_period(element["value"])[1]
-                    random_period = generate_close_random_period(element["value"], period_format)
-                    while random_period in generated_periods:
-                        random_period = generate_close_random_period(element["value"], period_format)
-                    generated_periods.add(random_period)
-                    similarity = compute_similarity_periods(element["value"], period_format, random_period, period_format)
-                    data.append((sentence, period_to_text(random_period), similarity))
-                for i in range(3):
-                    period_format = is_period(element["value"])[1]
-                    random_period = generate_random_period()
-                    while random_period in generated_periods:
-                        random_period = generate_random_period()
-                    generated_periods.add(random_period)
-                    random_period_format = is_period(random_period)[1]
-                    similarity = compute_similarity_periods(element["value"], period_format, random_period, random_period_format)
-                    data.append((sentence, period_to_text(random_period), similarity))
-            elif is_offset(element["value"])[0]:
-                generated_offsets = set()
-                generated_offsets.add(element["value"])
-                for i in range(5):
-                    offset_format = is_offset(element["value"])[1]
-                    random_offset = generate_random_offset()
-                    while random_offset in generated_offsets:
-                        random_offset = generate_random_offset()
-                    generated_offsets.add(random_offset)
-                    random_offset_format = is_offset(random_offset)[1]
-                    similarity = compute_similarity_offsets(element["value"], offset_format, random_offset, random_offset_format, current_date)
-                    data.append((sentence, offset_to_text(random_offset), similarity))
+                        second_random_temporal_expression = dates[0]
+                else:
+                    second_random_temporal_expression = generate_close_random_temporal_expression(value, current_date)
+                second_random_temporal_text = expression_to_text(second_random_temporal_expression)
+                if second_random_temporal_text:
+                    similarity = max([compute_similarity_expressions(v, second_random_temporal_expression, current_date, current_date_target) for v in values])
+                    sentence_target = f"[CLS] {second_random_temporal_text} [SEP] {current_target_text} [SEP]"
+                    data.append((sentence, sentence_target, similarity))
+            
 
 with open(os.path.join(DATA_FOLDER_PATH, OUTPUT_FILE_NAME), "w", encoding="utf-8") as f:
     json.dump(data, f, indent=4)

@@ -7,11 +7,12 @@ from utils.dates.dates_settings import START_DATE, END_DATE
 def compute_similarity_dates(first_date, second_date):
     first_year = int(first_date.split("-")[0])
     second_year = int(second_date.split("-")[0])
-    if first_year <= START_DATE or second_year > END_DATE:
+    if first_year < START_DATE or second_year > END_DATE:
         return 0.0
 
     first_is_date, first_date_type = is_date(first_date)
     second_is_date, second_date_type = is_date(second_date)
+
     if first_is_date and second_is_date:
         if first_date == second_date:
             return 1.0

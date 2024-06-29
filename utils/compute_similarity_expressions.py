@@ -5,6 +5,7 @@ from utils.periods.is_period import is_period
 from utils.dates.compute_similarity_dates import compute_similarity_dates_intervals
 from utils.offsets.offset_to_date import offset_to_date
 from utils.refs.ref_to_date import ref_to_date
+from utils.intervals.interval_to_date import interval_to_date
 from utils.dates.to_explicit_date import to_explicit_date
 from utils.refs.compute_similarity_refs import compute_similarity_refs
 
@@ -35,6 +36,9 @@ def compute_similarity_expressions(first_expression, second_expression, first_cu
     elif first_expression_date := ref_to_date(first_expression, first_current_date):
         first_is_date = True
         first_expression = first_expression_date
+    elif first_expression_date := interval_to_date(first_expression):
+        first_is_date = True
+        first_expression = first_expression_date
 
     if is_date(second_expression)[0]:
         second_is_date = True
@@ -43,6 +47,9 @@ def compute_similarity_expressions(first_expression, second_expression, first_cu
         second_is_date = True
         second_expression = second_expression_date
     elif second_expression_date := ref_to_date(second_expression, second_current_date):
+        second_is_date = True
+        second_expression = second_expression_date
+    elif second_expression_date := interval_to_date(second_expression):
         second_is_date = True
         second_expression = second_expression_date
 

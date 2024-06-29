@@ -23,8 +23,9 @@ with open(os.path.join(DATASET_PATH, INPUT_FILE_NAME), "r", encoding="utf-8") as
         for sentence in sentences:
             temporal_expression_bool, temporal_expressions = contains_temporal_expression(sentence, client=client)
             if temporal_expression_bool:
-                for temporal_expression in temporal_expressions:
-                    output_json.append({"input": sentence, "expression": temporal_expression.text, "value": temporal_expression.value if temporal_expression.value else temporal_expression.altValue})
+                expressions = [temporal_expression.text for temporal_expression in temporal_expressions]
+                values = [temporal_expression.value if temporal_expression.value else temporal_expression.altValue for temporal_expression in temporal_expressions]
+                output_json.append({"input": sentence, "expressions": expressions, "values": values})
 
 with open(os.path.join(DATASET_PATH, OUTPUT_FILE), "w", encoding="utf-8") as f:
     json.dump(output_json, f, indent=4)
