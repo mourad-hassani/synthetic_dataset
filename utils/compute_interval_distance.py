@@ -44,4 +44,5 @@ def days_since_base(date_string, base_date_string="1000-01-01"):
     base_date = datetime.strptime(base_date_string, "%Y-%m-%d")
     
     days_difference = (date - base_date).days
+    
     return days_difference
