@@ -29,7 +29,7 @@ from utils.intervals.is_interval import is_interval
 from utils.generate_random_temporal_expression import generate_random_temporal_expression, generate_close_random_temporal_expression
 from utils.compute_similarity_expressions import compute_similarity_expressions
 from utils.mappings.expression_to_text import expression_to_text
-from utils.dates.generate_random_date import generate_random_date_full
+from utils.dates.generate_random_date import generate_random_date_full, generate_random_close_date
 
 from utils.dates.compute_similarity_dates import compute_similarity_dates, compute_similarity_dates_intervals
 
@@ -47,7 +47,7 @@ def generate_date_dateset():
 
         sentence = f"{first_random_temporal_text}"
 
-        for _ in range(2):
+        for _ in range(1):
             second_random_temporal_expression = generate_close_random_temporal_expression(first_random_temporal_expression, None)
             second_random_temporal_text = expression_to_text(second_random_temporal_expression)
             
@@ -56,18 +56,30 @@ def generate_date_dateset():
             sentence_target = f"{second_random_temporal_text}"
             
             output_data.append((sentence, sentence_target, similarity))
-
-        dates = to_explicit_date(first_random_temporal_expression)
-
-        second_random_temporal_expression = dates[0]
-
-        second_random_temporal_text = expression_to_text(second_random_temporal_expression)
-                
-        similarity = compute_similarity_dates_intervals(to_explicit_date(first_random_temporal_expression), to_explicit_date(second_random_temporal_expression))
         
-        sentence_target = f"{second_random_temporal_text}"
-        
-        output_data.append((sentence, sentence_target, similarity))
+        for _ in range(1):
+            second_random_temporal_expression = generate_random_close_date(first_random_temporal_expression)
+            second_random_temporal_text = expression_to_text(second_random_temporal_expression)
+            
+            similarity = compute_similarity_dates_intervals(to_explicit_date(first_random_temporal_expression), to_explicit_date(second_random_temporal_expression))
+            
+            sentence_target = f"{second_random_temporal_text}"
+            
+            output_data.append((sentence, sentence_target, similarity))
+
+            dates = to_explicit_date(first_random_temporal_expression)
+
+        for _ in range(1):
+
+            second_random_temporal_expression = dates[0]
+
+            second_random_temporal_text = expression_to_text(second_random_temporal_expression)
+                    
+            similarity = compute_similarity_dates_intervals(to_explicit_date(first_random_temporal_expression), to_explicit_date(second_random_temporal_expression))
+            
+            sentence_target = f"{second_random_temporal_text}"
+            
+            output_data.append((sentence, sentence_target, similarity))
 
     with open(os.path.join(DATA_FOLDER_PATH, OUTPUT_FILE_NAME), "w", encoding="utf-8") as f:
         json.dump(output_data, f, indent=4)
