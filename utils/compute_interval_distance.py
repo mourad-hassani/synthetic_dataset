@@ -18,6 +18,10 @@ def compute_interval_distance_date(interval1, interval2):
     start1, end1 = interval1
     start2, end2 = interval2
 
+    distance_is_negative = True
+    if start1 <= start2:
+        distance_is_negative = False 
+
     if end1 >= start2 and end2 >= start1:
         overlap_start = max(start1, start2)
         overlap_end = min(end1, end2)
@@ -26,7 +30,11 @@ def compute_interval_distance_date(interval1, interval2):
         union_end = max(end1, end2)
         union_length = union_end - union_start + 1
         overlap_fraction = overlap_length / union_length
-        return max(0.8, overlap_fraction), True
+        
+        if distance_is_negative:
+            return -min(0.05, 1-overlap_fraction), True
+        
+        return min(0.05, 1-overlap_fraction), True
     
     distance = max(start2 - end1, start1 - end2)
 
@@ -37,6 +45,9 @@ def compute_interval_distance_date(interval1, interval2):
     else:
         output_distance = (distance / unit)
 
+    if distance_is_negative:
+        output_distance = -output_distance
+    
     return output_distance, False
 
 def days_since_base(date_string, base_date_string="1000-01-01"):

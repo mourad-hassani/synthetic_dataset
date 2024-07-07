@@ -40,34 +40,20 @@ def generate_date_dateset():
     DATA_FOLDER_PATH = "data/date_dataset"
     OUTPUT_FILE_NAME = "date_dataset_close.json"
 
-    for _ in tqdm(range(1000000)):
+    for _ in tqdm(range(20)):
 
         first_random_temporal_expression = generate_random_date(START_DATE, END_DATE)
         first_random_temporal_text = expression_to_text(first_random_temporal_expression)
 
-        current_date = generate_random_date_full(START_DATE, END_DATE)
-        current_text = expression_to_text(current_date)
-
-        year = int(current_date.split("-")[0])
-        if START_DATE < year < END_DATE:
-            start_year = year - 1
-            end_year = year + 1
-        else:
-            start_year = START_DATE
-            end_year = END_DATE
-
-        current_date_target = generate_random_date_full(start_year, end_year)
-        current_target_text = expression_to_text(current_date_target)
-
-        sentence = f"[CLS] {first_random_temporal_text} [SEP] {current_text} [SEP]"
+        sentence = f"{first_random_temporal_text}"
 
         for _ in range(2):
-            second_random_temporal_expression = generate_close_random_temporal_expression(first_random_temporal_expression, current_date)
+            second_random_temporal_expression = generate_close_random_temporal_expression(first_random_temporal_expression, None)
             second_random_temporal_text = expression_to_text(second_random_temporal_expression)
             
             similarity = compute_similarity_dates_intervals(to_explicit_date(first_random_temporal_expression), to_explicit_date(second_random_temporal_expression))
             
-            sentence_target = f"[CLS] {second_random_temporal_text} [SEP] {current_target_text} [SEP]"
+            sentence_target = f"{second_random_temporal_text}"
             
             output_data.append((sentence, sentence_target, similarity))
 
@@ -79,7 +65,7 @@ def generate_date_dateset():
                 
         similarity = compute_similarity_dates_intervals(to_explicit_date(first_random_temporal_expression), to_explicit_date(second_random_temporal_expression))
         
-        sentence_target = f"[CLS] {second_random_temporal_text} [SEP] {current_target_text} [SEP]"
+        sentence_target = f"{second_random_temporal_text}"
         
         output_data.append((sentence, sentence_target, similarity))
 

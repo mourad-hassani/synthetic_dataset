@@ -23,10 +23,9 @@ def compute_similarity_dates(first_date, second_date):
         elif first_date_type == second_date_type:
             distance = compute_distance_dates_same_type(first_date=first_date, second_date=second_date, date_type=first_date_type)
             
-            return tanh(0.1 * distance)
+            return tanh(distance)
         
         elif first_date_type != second_date_type and is_in(first_date=first_date, first_date_type=first_date_type, second_date=second_date, second_date_type=second_date_type):
-
             return -0.1
         
         elif first_date_type != second_date_type and is_in(first_date=second_date, first_date_type=second_date_type, second_date=first_date, second_date_type=first_date_type):
@@ -35,7 +34,7 @@ def compute_similarity_dates(first_date, second_date):
         else:
             distance = compute_distance_dates(first_date, first_date_type, second_date, second_date_type)
             
-            return tanh(0.5 * distance)
+            return tanh(distance)
     else:
         raise ValueError(f"first_date: {first_date}, second_date: {second_date}")
 
@@ -52,7 +51,7 @@ def compute_similarity_dates_intervals(first_date, second_date):
     distance, overlap = compute_interval_distance_date(first_date, second_date)
     
     if overlap:
-        return tanh(1 - distance)
+        return distance
     
     else:
-        return tanh(0.5 / distance)
+        return tanh(distance)
