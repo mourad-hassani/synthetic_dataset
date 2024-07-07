@@ -18,9 +18,9 @@ def compute_interval_distance_date(interval1, interval2):
     start1, end1 = interval1
     start2, end2 = interval2
 
-    distance_is_negative = True
-    if start1 <= start2:
-        distance_is_negative = False 
+    distance_is_negative = False
+    if end1 < end2:
+        distance_is_negative = True
 
     if end1 >= start2 and end2 >= start1:
         overlap_start = max(start1, start2)
@@ -46,7 +46,7 @@ def compute_interval_distance_date(interval1, interval2):
         output_distance = (distance / unit)
 
     if distance_is_negative:
-        output_distance = -output_distance
+        return -output_distance, False
     
     return output_distance, False
 

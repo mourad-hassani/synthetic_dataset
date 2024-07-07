@@ -55,7 +55,8 @@ def generate_date_dateset():
             
             sentence_target = f"{second_random_temporal_text}"
             
-            output_data.append((sentence, sentence_target, similarity))
+            if similarity != 0:
+                output_data.append((sentence, sentence_target, similarity))
         
         for _ in range(1):
             second_random_temporal_expression = generate_random_close_date(first_random_temporal_expression)
@@ -65,21 +66,32 @@ def generate_date_dateset():
             
             sentence_target = f"{second_random_temporal_text}"
             
-            output_data.append((sentence, sentence_target, similarity))
+            if similarity != 0:
+                output_data.append((sentence, sentence_target, similarity))
 
             dates = to_explicit_date(first_random_temporal_expression)
 
         for _ in range(1):
-
             second_random_temporal_expression = dates[0]
-
             second_random_temporal_text = expression_to_text(second_random_temporal_expression)
                     
             similarity = compute_similarity_dates_intervals(to_explicit_date(first_random_temporal_expression), to_explicit_date(second_random_temporal_expression))
             
             sentence_target = f"{second_random_temporal_text}"
             
-            output_data.append((sentence, sentence_target, similarity))
+            if similarity != 0:
+                output_data.append((sentence, sentence_target, similarity))
+
+        for _ in range(1):
+            second_random_temporal_expression = generate_random_date(START_DATE, END_DATE)
+            second_random_temporal_text = expression_to_text(second_random_temporal_expression)
+
+            similarity = compute_similarity_dates_intervals(to_explicit_date(first_random_temporal_expression), to_explicit_date(second_random_temporal_expression))
+
+            sentence_target = f"{second_random_temporal_text}"
+
+            if similarity != 0:
+                output_data.append((sentence, sentence_target, similarity))
 
     with open(os.path.join(DATA_FOLDER_PATH, OUTPUT_FILE_NAME), "w", encoding="utf-8") as f:
         json.dump(output_data, f, indent=4)
