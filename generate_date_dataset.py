@@ -40,12 +40,14 @@ def generate_date_dateset():
     DATA_FOLDER_PATH = "data/date_dataset"
     OUTPUT_FILE_NAME = "date_dataset_close.json"
 
-    for _ in tqdm(range(20)):
+    for _ in tqdm(range(1000000)):
 
         first_random_temporal_expression = generate_random_date(START_DATE, END_DATE)
         first_random_temporal_text = expression_to_text(first_random_temporal_expression)
 
         sentence = f"{first_random_temporal_text}"
+
+        output = []
 
         for _ in range(1):
             second_random_temporal_expression = generate_close_random_temporal_expression(first_random_temporal_expression, None)
@@ -56,8 +58,8 @@ def generate_date_dateset():
             sentence_target = f"{second_random_temporal_text}"
             
             if similarity != 0:
-                output_data.append((sentence, sentence_target, similarity))
-        
+                output.append((sentence, sentence_target, abs(similarity)))
+
         for _ in range(1):
             second_random_temporal_expression = generate_random_close_date(first_random_temporal_expression)
             second_random_temporal_text = expression_to_text(second_random_temporal_expression)
@@ -67,11 +69,11 @@ def generate_date_dateset():
             sentence_target = f"{second_random_temporal_text}"
             
             if similarity != 0:
-                output_data.append((sentence, sentence_target, similarity))
-
-            dates = to_explicit_date(first_random_temporal_expression)
+                output.append((sentence, sentence_target, abs(similarity)))
 
         for _ in range(1):
+            dates = to_explicit_date(first_random_temporal_expression)
+
             second_random_temporal_expression = dates[0]
             second_random_temporal_text = expression_to_text(second_random_temporal_expression)
                     
@@ -80,9 +82,12 @@ def generate_date_dateset():
             sentence_target = f"{second_random_temporal_text}"
             
             if similarity != 0:
-                output_data.append((sentence, sentence_target, similarity))
+                output.append((sentence, sentence_target, abs(similarity)))
 
-        for _ in range(1):
+        if len(output) > 0:
+            output_data.append(output[random.randint(0, len(output)-1)])
+        
+        for _ in range(4):
             second_random_temporal_expression = generate_random_date(START_DATE, END_DATE)
             second_random_temporal_text = expression_to_text(second_random_temporal_expression)
 
@@ -91,7 +96,7 @@ def generate_date_dateset():
             sentence_target = f"{second_random_temporal_text}"
 
             if similarity != 0:
-                output_data.append((sentence, sentence_target, similarity))
+                output_data.append((sentence, sentence_target, abs(similarity)))
 
     with open(os.path.join(DATA_FOLDER_PATH, OUTPUT_FILE_NAME), "w", encoding="utf-8") as f:
         json.dump(output_data, f, indent=4)

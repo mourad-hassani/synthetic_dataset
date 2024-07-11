@@ -4,3 +4,4 @@ __pycache__/
 test.py
 new_test.py
 test_spacy.py
+*test.py
