@@ -2,7 +2,7 @@ import random
 from utils.extract_integers import extract_integers
 
 def generate_random_offset():
-    rand_int = random.randint(1, 20)
+    rand_int = random.randint(1, 10)
     is_negative = bool(random.getrandbits(1))
     rand_format = random.randint(0, 15)
     rand_bool = bool(random.getrandbits(1))
@@ -56,8 +56,8 @@ def generate_close_random_offset(value, type):
         
     is_negative = True if value < 0 else False
     value = abs(value)
-    min_value = max(1, value - 10)
-    max_value = min(30, value + 10)
+    min_value = max(1, value - 5)
+    max_value = min(15, value + 5)
     rand_int = random.randint(min_value, max_value)
 
     if is_negative:

@@ -20,7 +20,7 @@ OUTPUT_FILE_NAME = "base_dataset_close.json"
 
 output_data = []
 
-for i in  tqdm(range(1000000)):
+for i in  tqdm(range(3000000)):
     first_random_temporal_expression = generate_random_temporal_expression()
     first_random_temporal_text = expression_to_text(first_random_temporal_expression)
     current_date = generate_random_date_full(START_DATE, END_DATE)
@@ -38,13 +38,13 @@ for i in  tqdm(range(1000000)):
 
     sentence = f"[CLS] {first_random_temporal_text} [SEP] {current_text} [SEP]"
     
-    for j in range(2):
+    for j in range(4):
         second_random_temporal_expression = generate_random_temporal_expression()
         second_random_temporal_text = expression_to_text(second_random_temporal_expression)
         similarity = compute_similarity_expressions(first_random_temporal_expression, second_random_temporal_expression, current_date, current_date_target)
         sentence_target = f"[CLS] {second_random_temporal_text} [SEP] {current_target_text} [SEP]"
         output_data.append((sentence, sentence_target, similarity))
-    for j in range(2):
+    for j in range(0):
         second_random_temporal_expression = generate_close_random_temporal_expression(first_random_temporal_expression, current_date)
         second_random_temporal_text = expression_to_text(second_random_temporal_expression)
         similarity = compute_similarity_expressions(first_random_temporal_expression, second_random_temporal_expression, current_date, current_date_target)
@@ -77,7 +77,7 @@ with open(os.path.join(DATA_FOLDER_PATH, OUTPUT_FILE_NAME), "w", encoding="utf-8
 
 count = 0
 for element in output_data:
-    if element[2] > 0.1:
+    if element[2] > 0.5:
         count += 1
 
 print(f"Close similarities : {count / len(output_data)}")
