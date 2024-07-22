@@ -9,6 +9,12 @@ def compute_interval_distance(interval1, interval2):
         return 0
 
 def compute_interval_distance_date(interval1, interval2):
+    """
+    This function needs to take into consideration : 
+        - Overlapping.
+        - Inclusion.
+    """
+    
     interval1 = [days_since_base(interval1[0]), days_since_base(interval1[1])]
     interval2 = [days_since_base(interval2[0]), days_since_base(interval2[1])]
 
@@ -18,6 +24,12 @@ def compute_interval_distance_date(interval1, interval2):
     start1, end1 = interval1
     start2, end2 = interval2
 
+    if start1 == start2 and end1 == end2:
+        return 1.0, True
+
+    if start1 < start2 and end1 > end2:
+        return 0.9, True
+    
     if end1 >= start2 and end2 >= start1:
         overlap_start = max(start1, start2)
         overlap_end = min(end1, end2)
@@ -26,7 +38,7 @@ def compute_interval_distance_date(interval1, interval2):
         union_end = max(end1, end2)
         union_length = union_end - union_start + 1
         overlap_fraction = overlap_length / union_length
-        return max(0.8, overlap_fraction), True
+        return min(0.2, overlap_fraction), True
     
     distance = max(start2 - end1, start1 - end2)
 

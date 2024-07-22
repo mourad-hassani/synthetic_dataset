@@ -10,6 +10,8 @@ from utils.dates.to_explicit_date import to_explicit_date
 from utils.refs.compute_similarity_refs import compute_similarity_refs
 
 def compute_similarity_expressions(first_expression, second_expression, first_current_date, second_current_date):
+    
+    # This is not executed because we do not generate periods.
     if is_period(first_expression)[0]:
         if is_period(second_expression)[0]:
             return compute_similarity_periods(first_expression, is_period(first_expression)[1], second_expression, is_period(second_expression)[1])

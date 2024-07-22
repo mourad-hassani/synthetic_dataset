@@ -40,6 +40,8 @@ def compute_similarity_dates_intervals(first_date, second_date):
     
     distance, overlap = compute_interval_distance_date(first_date, second_date)
     if overlap:
-        return distance
+        similarity = distance
+        return similarity
     else:
-        return 0.5 / distance
+        similarity = 0.5 / distance
+        return similarity
