@@ -14,17 +14,17 @@ def compute_similarity_expressions(first_expression, second_expression, first_cu
     # This is not executed because we do not generate periods.
     if is_period(first_expression)[0]:
         if is_period(second_expression)[0]:
-            return compute_similarity_periods(first_expression, is_period(first_expression)[1], second_expression, is_period(second_expression)[1])
+            return compute_similarity_periods(first_expression, is_period(first_expression)[1], second_expression, is_period(second_expression)[1]), False
         else:
-            return 0.0
+            return 0.0, False
     
     refs = ["TMO", "TEV", "TNI"]
     
     if first_expression in refs:
         if second_expression in refs:
-            return compute_similarity_refs(first_expression, second_expression)
+            return compute_similarity_refs(first_expression, second_expression), False
         else:
-            return 0.0
+            return 0.0, False
         
     first_is_date = False
     second_is_date = False
@@ -58,4 +58,4 @@ def compute_similarity_expressions(first_expression, second_expression, first_cu
     if first_is_date and second_is_date:
         return compute_similarity_dates_intervals(first_expression, second_expression)
     else:
-        return 0.0
+        return 0.0, False

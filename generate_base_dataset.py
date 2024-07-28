@@ -1,10 +1,11 @@
+import os
+import json
+from tqdm import tqdm
+
 from utils.generate_random_temporal_expression import generate_random_temporal_expression, generate_close_random_temporal_expression
 from utils.compute_similarity_expressions import compute_similarity_expressions
 from utils.mappings.expression_to_text import expression_to_text
 from utils.dates.generate_random_date import generate_random_date_full
-import os
-import json
-from tqdm import tqdm
 from utils.dates.dates_settings import START_DATE, END_DATE
 from utils.refs.ref_to_date import ref_to_date
 from utils.offsets.offset_to_date import offset_to_date
@@ -20,7 +21,7 @@ OUTPUT_FILE_NAME = "base_dataset_close.json"
 
 output_data = []
 
-for i in  tqdm(range(1000000)):
+for i in  tqdm(range(100)):
     first_random_temporal_expression = generate_random_temporal_expression()
     first_random_temporal_text = expression_to_text(first_random_temporal_expression)
     current_date = generate_random_date_full(START_DATE, END_DATE)
@@ -41,15 +42,21 @@ for i in  tqdm(range(1000000)):
     for j in range(4):
         second_random_temporal_expression = generate_random_temporal_expression()
         second_random_temporal_text = expression_to_text(second_random_temporal_expression)
-        similarity = compute_similarity_expressions(first_random_temporal_expression, second_random_temporal_expression, current_date, current_date_target)
+        similarity, overlap = compute_similarity_expressions(first_random_temporal_expression, second_random_temporal_expression, current_date, current_date_target)
         sentence_target = f"[CLS] {second_random_temporal_text} [SEP] {current_target_text} [SEP]"
         output_data.append((sentence, sentence_target, similarity))
+
+        if overlap:
+            similarity, overlap = compute_similarity_expressions(second_random_temporal_expression, first_random_temporal_expression, current_date_target, current_date)
+            output_data.append((sentence_target, sentence, similarity))
+    
     for j in range(0):
         second_random_temporal_expression = generate_close_random_temporal_expression(first_random_temporal_expression, current_date)
         second_random_temporal_text = expression_to_text(second_random_temporal_expression)
         similarity = compute_similarity_expressions(first_random_temporal_expression, second_random_temporal_expression, current_date, current_date_target)
         sentence_target = f"[CLS] {second_random_temporal_text} [SEP] {current_target_text} [SEP]"
         output_data.append((sentence, sentence_target, similarity))
+    
     for j in range(1):
         dates = None
         if is_offset(first_random_temporal_expression)[0]:
@@ -68,7 +75,7 @@ for i in  tqdm(range(1000000)):
         else:
             second_random_temporal_expression = generate_close_random_temporal_expression(first_random_temporal_expression, current_date)
         second_random_temporal_text = expression_to_text(second_random_temporal_expression)
-        similarity = compute_similarity_expressions(first_random_temporal_expression, second_random_temporal_expression, current_date, current_date_target)
+        similarity, overlap = compute_similarity_expressions(first_random_temporal_expression, second_random_temporal_expression, current_date, current_date_target)
         sentence_target = f"[CLS] {second_random_temporal_text} [SEP] {current_target_text} [SEP]"
         output_data.append((sentence, sentence_target, similarity))
 
