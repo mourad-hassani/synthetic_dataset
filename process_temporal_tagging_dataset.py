@@ -1,22 +1,11 @@
 import os
 import json
 from tqdm import tqdm
-from utils.periods.generate_random_period import generate_random_period, generate_close_random_period
-from utils.dates.generate_random_date import generate_random_date, generate_random_date_full
-from utils.offsets.generate_random_offset import generate_random_offset
-from utils.periods.compute_similarity_periods import compute_similarity_periods
-from utils.dates.compute_similarity_dates import compute_similarity_dates
-from utils.offsets.compute_similarity_offsets import compute_similarity_offsets
-from utils.periods.is_period import is_period
+from utils.dates.generate_random_date import generate_random_date_full
 from utils.dates.is_date import is_date
 from utils.offsets.is_offset import is_offset
 from utils.refs.is_ref import is_ref
 from utils.intervals.is_interval import is_interval
-from utils.mappings.date_to_text import date_to_text
-from utils.mappings.period_to_text import period_to_text
-from utils.mappings.offset_to_text import offset_to_text
-from utils.mappings.ref_to_text import ref_to_text
-from utils.mappings.interval_to_text import interval_to_text
 from utils.dates.dates_settings import START_DATE, END_DATE
 from utils.mappings.expression_to_text import expression_to_text
 from utils.generate_random_temporal_expression import generate_random_temporal_expression, generate_close_random_temporal_expression
@@ -25,12 +14,6 @@ from utils.offsets.offset_to_date import offset_to_date
 from utils.refs.ref_to_date import ref_to_date
 from utils.dates.to_explicit_date import to_explicit_date
 from utils.intervals.interval_to_date import interval_to_date
-from utils.text.get_sentences import split_into_sentences
-import os
-import json
-from tqdm import tqdm
-from utils.stanza.temporal_expressions import contains_temporal_expression
-from stanza.server import CoreNLPClient
 
 DATASET_PATH = "./data"
 
@@ -41,7 +24,7 @@ def process_dataset():
     data = []
 
     with open(os.path.join(DATASET_PATH, INPUT_FILE_NAME), "r", encoding="utf-8") as f:
-        input_data = json.load(f)[:1000]
+        input_data = json.load(f)[:100000]
 
         for element in tqdm(input_data):
             expressions_tmp = element["expressions"]
@@ -73,6 +56,11 @@ def process_dataset():
                     similarity = max([compute_similarity_expressions(v, second_random_temporal_expression, current_date, current_date_target) for v in values])
                     sentence_target = f"[CLS] {second_random_temporal_text} [SEP] {current_target_text} [SEP]"
                     data.append((sentence, sentence_target, similarity))
+
+                    if similarity >= 0.9:
+                        similarity = max([compute_similarity_expressions(second_random_temporal_expression, v, current_date_target, current_date) for v in values])
+                        data.append((sentence_target, sentence, similarity))
+
                 for j in range(2):
                     current_date_target = generate_random_date_full(start_year, end_year)
                     current_target_text = expression_to_text(current_date_target)
@@ -81,6 +69,11 @@ def process_dataset():
                     similarity = max([compute_similarity_expressions(v, second_random_temporal_expression, current_date, current_date_target) for v in values])
                     sentence_target = f"[CLS] {second_random_temporal_text} [SEP] {current_target_text} [SEP]"
                     data.append((sentence, sentence_target, similarity))
+
+                    if similarity >= 0.9:
+                        similarity = max([compute_similarity_expressions(second_random_temporal_expression, v, current_date_target, current_date) for v in values])
+                        data.append((sentence_target, sentence, similarity))
+
                 for j in range(1):
                     current_date_target = generate_random_date_full(start_year, end_year)
                     current_target_text = expression_to_text(current_date_target)
