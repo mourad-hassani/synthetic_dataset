@@ -27,6 +27,9 @@ def process_dataset():
         input_data = json.load(f)[:100000]
 
         for element in tqdm(input_data):
+            if element == input_data[35127]:
+                continue
+            
             expressions_tmp = element["expressions"]
             values_tmp = [e if expression_to_text(e) else None for e in element["values"]]
             expressions, values = [], []
