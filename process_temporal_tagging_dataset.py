@@ -31,7 +31,7 @@ def process_dataset():
             values_tmp = [e if expression_to_text(e) else None for e in element["values"]]
             expressions, values = [], []
             for e, v in zip(expressions_tmp, values_tmp):
-                if v:
+                if v and expression_to_text(v):
                     expressions.append(e)
                     values.append(v)
             for expression, value in zip(expressions, values):
@@ -55,11 +55,11 @@ def process_dataset():
                     second_random_temporal_text = expression_to_text(second_random_temporal_expression)
                     similarity = max([compute_similarity_expressions(v, second_random_temporal_expression, current_date, current_date_target) for v in values])
                     sentence_target = f"[CLS] {second_random_temporal_text} [SEP] {current_target_text} [SEP]"
-                    data.append((sentence, sentence_target, similarity))
+                    data.append((sentence.strip(), sentence_target.strip(), similarity))
 
                     if similarity >= 0.9:
                         similarity = max([compute_similarity_expressions(second_random_temporal_expression, v, current_date_target, current_date) for v in values])
-                        data.append((sentence_target, sentence, similarity))
+                        data.append((sentence_target.strip(), sentence.strip(), similarity))
 
                 for j in range(2):
                     current_date_target = generate_random_date_full(start_year, end_year)
@@ -68,11 +68,11 @@ def process_dataset():
                     second_random_temporal_text = expression_to_text(second_random_temporal_expression)
                     similarity = max([compute_similarity_expressions(v, second_random_temporal_expression, current_date, current_date_target) for v in values])
                     sentence_target = f"[CLS] {second_random_temporal_text} [SEP] {current_target_text} [SEP]"
-                    data.append((sentence, sentence_target, similarity))
+                    data.append((sentence.strip(), sentence_target.strip(), similarity))
 
                     if similarity >= 0.9:
                         similarity = max([compute_similarity_expressions(second_random_temporal_expression, v, current_date_target, current_date) for v in values])
-                        data.append((sentence_target, sentence, similarity))
+                        data.append((sentence_target.strip(), sentence.strip(), similarity))
 
                 for j in range(1):
                     current_date_target = generate_random_date_full(start_year, end_year)
@@ -97,7 +97,7 @@ def process_dataset():
                     if second_random_temporal_text:
                         similarity = max([compute_similarity_expressions(v, second_random_temporal_expression, current_date, current_date_target) for v in values])
                         sentence_target = f"[CLS] {second_random_temporal_text} [SEP] {current_target_text} [SEP]"
-                        data.append((sentence, sentence_target, similarity))
+                        data.append((sentence.strip(), sentence_target.strip(), similarity))
                 
 
     with open(os.path.join(DATASET_PATH, OUTPUT_FILE_NAME), "w", encoding="utf-8") as f:
